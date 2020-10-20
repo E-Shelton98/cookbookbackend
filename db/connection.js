@@ -1,10 +1,17 @@
+require('dotenv').config()
+
+const { MONGODBURI } = process.env
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/cookbooks_db', {
+mongoose.connect(MONGODBURI, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
 });
 
-mongoose.Promise = Promise;
+const DB = mongoose.connection
+
+DB.on('open', () => console.log('You are connected to Mongo'))
+	.on('close', () => console.log('You are disconnected to Mongo'))
+	.on('error', (err) => console.log(err));
 
 module.exports = mongoose;
